@@ -1,0 +1,17 @@
+
+services:
+  ms_user:
+    image: mysql:8.0
+    container_name: ms_user
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_user
+      MYSQL_USER: ms_user
+      MYSQL_PASSWORD: root
+    ports:
+      - "3310:3306"
+    volumes:
+      - ms_user_data:/var/lib/mysql
+volumes:
+  ms_user_data:
