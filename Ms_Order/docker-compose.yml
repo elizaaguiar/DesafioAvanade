@@ -1,0 +1,17 @@
+
+services:
+  ms_order:
+    image: mysql:8.0
+    container_name: ms_order
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_order
+      MYSQL_USER: ms_order
+      MYSQL_PASSWORD: root
+    ports:
+      - "3308:3306"
+    volumes:
+      - ms_order_data:/var/lib/mysql
+volumes:
+  ms_order_data:
