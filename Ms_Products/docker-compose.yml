@@ -1,0 +1,17 @@
+
+services:
+  ms_products:
+    image: mysql:8.0
+    container_name: ms_products
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms_products
+      MYSQL_USER: ms_products
+      MYSQL_PASSWORD: root
+    ports:
+      - "3309:3306"
+    volumes:
+      - ms_products_data:/var/lib/mysql
+volumes:
+  ms_products_data:

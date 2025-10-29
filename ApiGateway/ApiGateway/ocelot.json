@@ -1,0 +1,94 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/user/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5062
+        }
+      ],
+      "UpstreamPathTemplate": "/user/login",
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": false,
+        "UseCookieContainer": false,
+        "UseProxy": false
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/user/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5062
+        }
+      ],
+      "UpstreamPathTemplate": "/user/register",
+      "UpstreamHttpMethod": [
+        "Post"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/product/{Guid}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5037
+        }
+      ],
+      "UpstreamPathTemplate": "/product/{Guid}",
+      "UpstreamHttpMethod": [
+        "Get"
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/product/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5037
+        }
+      ],
+      "UpstreamPathTemplate": "/product/register",
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/order/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5161
+        }
+      ],
+      "UpstreamPathTemplate": "/order/register",
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5262"
+  }
+}
