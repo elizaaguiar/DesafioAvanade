@@ -21,9 +21,28 @@ namespace Ms_Products.Repositories
             _context.Add(product);
             _context.SaveChanges();
         }
-        public async Task<Product> GetByGuid(Guid Guid)
+        public Product GetByGuid(Guid ProductId)
         {
-            return await _context.Product.FirstOrDefaultAsync(p => p.Guid == Guid);
+            var product = _context.Product.FirstOrDefault(p => p.Guid == ProductId);
+            if (product == null)
+            {
+                throw new Exception("Produto indisponível");
+            }
+            return product;
+            
+        }
+        public async Task<Product> StockUpdate(Guid productId, int quantity)
+        {
+            var product = GetByGuid(productId);
+            if (product.Stock < quantity)
+            {
+                throw new Exception("Estoque indisponível");
+            }
+            product.Stock -= quantity;
+            _context.Product.Update(product);
+            _context.SaveChanges();
+
+            return product;
         }
     }
 }

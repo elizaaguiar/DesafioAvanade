@@ -24,11 +24,20 @@ namespace Ms_Products.Services
             _productRepository.CreateProduct(product);
             return product;
         }
-        public async Task<Product> GetByGuid(Guid Guid)
+        public Product GetByGuid(Guid Guid)
         {
-            var products = await _productRepository.GetByGuid(Guid);
+            var products = _productRepository.GetByGuid(Guid);
             return products;
         }
-
+        public async Task<List<OrderProductResponseDTO>> StockVerifier(VerifyStockListDTO verifyStockProductDTO)
+        {
+            var products = new List<Product>();
+            foreach (var productItem in verifyStockProductDTO.Products)
+            {
+                var productUpdate = await _productRepository.StockUpdate(productItem.ProductId, productItem.Quantity);
+                products.Add(productUpdate);
+            }
+            return _mapper.Map<List<OrderProductResponseDTO>>(products);
+        }
     }
 }

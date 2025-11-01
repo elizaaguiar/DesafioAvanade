@@ -8,5 +8,9 @@ public class MappingProfile : Profile
     {
         CreateMap<Product, ProductDTO>();
         CreateMap<ProductDTO, Product>();
+        CreateMap<OrderProductResponseDTO, Product>();
+        CreateMap<Product, OrderProductResponseDTO>();
+        CreateMap<VerifyStockListDTO, OrderProductResponseDTO>();
+        CreateMap<OrderProductResponseDTO, VerifyStockListDTO>();
     }
 }

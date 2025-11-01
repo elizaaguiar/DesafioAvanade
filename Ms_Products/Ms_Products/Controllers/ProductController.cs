@@ -20,9 +20,9 @@ namespace Ms_Products.Controllers
             _product = product;
         }
         [HttpGet("{Guid}")]
-        public async Task<IActionResult> GetByGuid(Guid Guid)
+        public IActionResult GetByGuid(Guid Guid)
         {
-            return Ok(await _product.GetByGuid(Guid));
+            return Ok(_product.GetByGuid(Guid));
         }
         [HttpPost("register")]
         public IActionResult CreateProduct(ProductDTO productDTO)
@@ -30,13 +30,19 @@ namespace Ms_Products.Controllers
             var newProduct = _product.CreateProduct(productDTO);
             var product = new ProductResponseDTO
             {
-                Guid = newProduct.Guid,
+                ProductId = newProduct.Guid,
                 Name = newProduct.Name,
                 Description = newProduct.Description,
                 Price = newProduct.Price,
                 CreatedAt = newProduct.CreatedAt
             };
             return Ok(product);
+        }
+        [HttpPost("stock")]
+        public async Task<IActionResult> StockVerifier(VerifyStockListDTO verifyStock)
+        {
+            var productStock = await _product.StockVerifier(verifyStock);
+            return Ok(productStock);
         }
     }
 }

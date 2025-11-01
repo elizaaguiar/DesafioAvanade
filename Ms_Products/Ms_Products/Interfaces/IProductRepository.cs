@@ -5,6 +5,7 @@ namespace Ms_Products.Interfaces
     public interface IProductRepository
     {
         void CreateProduct(Product product);
-        Task<Product> GetByGuid(Guid Guid);
+        Product GetByGuid(Guid ProductId);
+        Task<Product> StockUpdate(Guid ProductId, int Quantity);
     }
 }

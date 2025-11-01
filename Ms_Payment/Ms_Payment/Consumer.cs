@@ -20,7 +20,7 @@ namespace Ms_Payment
             {
                 var message = context.Message;
                 _logger.LogInformation($"Recebido pedido para pagamento: {message.OrderId} no valor de {message.TotalAmount}");
-                // bool pagamentoAprovado = await _gateway.Processar(message.CreditCardNumber, message.TotalAmount);
+                // bool pagamentoAprovado = await _gateway.Processar(message.TotalAmount);
                 // bool pagamentoAprovado = true;
 
                 // if (pagamentoAprovado)

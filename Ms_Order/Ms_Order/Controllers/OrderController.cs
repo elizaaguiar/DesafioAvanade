@@ -18,8 +18,16 @@ namespace Ms_Order.Controllers
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDTO orderDTO)
         {
             var newOrder = await _orderService.Create(orderDTO);
+            var order = new OrderResponseDTO
+            {
+                OrderId = newOrder.OrderId,
+                UserId = newOrder.UserId,
+                TotalAmount = newOrder.TotalAmount,
+                Status = newOrder.Status,
+                CreatedAt = newOrder.CreatedAt
+            };
 
-            return Ok(newOrder);
+            return Ok(order);
         }
     }
 }

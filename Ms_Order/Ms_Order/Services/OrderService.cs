@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using MassTransit;
 using Contracts;
+using AutoMapper;
 
 namespace Ms_Order.Services
 {
@@ -25,14 +26,13 @@ namespace Ms_Order.Services
             _httpContextAccessor = httpContextAccessor;
             _orderRepository = orderRepository;
             _publishEndpoint = publishEndpoint;
+
         }
         public async Task<Order> Create(CreateOrderDTO orderRequest)
         {
             var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
             var productClient = _httpClientFactory.CreateClient("Product");
             productClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
-
-            var product = await productClient.GetFromJsonAsync<ProductDTO>($"/product/{orderRequest.}");
 
             var userClaims = _httpContextAccessor.HttpContext.User;
 
@@ -43,21 +43,36 @@ namespace Ms_Order.Services
             {
                 throw new Exception("Token do usuário está incompleto.");
             }
-
-            if (product == null)
+            double productAmount = 0;
+            foreach (var products in orderRequest.Products)
             {
-                throw new Exception($"Produto com ID {orderRequest.ProductId} não encontrado.");
-            }
+                var stockValidation = new CreateOrderProductDTO
+                {
+                    ProductId = products.ProductId,
+                    Quantity = products.Quantity
+                };
 
+                var response = await productClient.PostAsJsonAsync("/product/stock", stockValidation);
+                if (response == null)
+                {
+                    throw new Exception($"Produto com ID {products.ProductId} não encontrado.");
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Falha ao validar estoque do produto {products.ProductId}.");
+                }
+                var validationResult = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+                productAmount += (double)(products.Quantity * );
+            }
             var newOrder = new Order
             {
                 OrderId = Guid.NewGuid(),
-                UserId = Guid.Parse(userId),
-                ProductId = orderRequest.ProductId,
-                TotalAmount = (double)(orderRequest.Quantity * product.Amount),
-                Status = "WaitingPayment",
+                TotalAmount = productAmount,
+                Status = "Waiting payment",
                 CreatedAt = DateTime.UtcNow
             };
+
             await _orderRepository.Create(newOrder);
 
             await _publishEndpoint.Publish(new PaymentRequestedEvent(
