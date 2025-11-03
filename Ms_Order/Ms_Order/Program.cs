@@ -2,6 +2,7 @@ using System.Text;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ms_Order.AppDbContext;
@@ -76,6 +77,10 @@ builder.Services.AddHttpClient("User", client =>
     client.BaseAddress = new Uri(builder.Configuration["UserUrl"]); 
 });
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<MappingProfile>();
+});
 builder.Services.AddMassTransit(busConfigurator =>
 {
 busConfigurator.UsingRabbitMq((context, cfg) =>

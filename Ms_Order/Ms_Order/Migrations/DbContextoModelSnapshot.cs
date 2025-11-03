@@ -36,17 +36,14 @@ namespace Ms_Order.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("char(36)");
-
                     b.Property<DateTime>("RemovedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Status")
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -56,7 +53,48 @@ namespace Ms_Order.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("Ms_Order.Entities.OrderProducts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OrderProuctsId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderProducts", (string)null);
+                });
+
+            modelBuilder.Entity("Ms_Order.Entities.OrderProducts", b =>
+                {
+                    b.HasOne("Ms_Order.Entities.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Ms_Order.Entities.Order", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

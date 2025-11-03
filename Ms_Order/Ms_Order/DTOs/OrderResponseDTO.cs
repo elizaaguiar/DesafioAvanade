@@ -9,7 +9,7 @@ namespace Ms_Order.DTOs
     {
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
-        public string UserName { get; set; }
+        public string Email { get; set; }
         public double TotalAmount { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }

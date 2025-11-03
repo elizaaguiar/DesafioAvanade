@@ -18,15 +18,16 @@ namespace Ms_Order.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrderRepository _orderRepository;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
         public OrderService(IHttpClientFactory httpClientFactory,
                             IHttpContextAccessor httpContextAccessor,
-                            IOrderRepository orderRepository, IPublishEndpoint publishEndpoint)
+                            IOrderRepository orderRepository, IPublishEndpoint publishEndpoint, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _httpContextAccessor = httpContextAccessor;
             _orderRepository = orderRepository;
             _publishEndpoint = publishEndpoint;
-
+            _mapper = mapper;
         }
         public async Task<Order> Create(CreateOrderDTO orderRequest)
         {
@@ -37,41 +38,70 @@ namespace Ms_Order.Services
             var userClaims = _httpContextAccessor.HttpContext.User;
 
             var userId = userClaims.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userName = userClaims.FindFirstValue(ClaimTypes.Email);
 
             if (string.IsNullOrEmpty(userId))
             {
                 throw new Exception("Token do usuário está incompleto.");
             }
-            double productAmount = 0;
-            foreach (var products in orderRequest.Products)
-            {
-                var stockValidation = new CreateOrderProductDTO
-                {
-                    ProductId = products.ProductId,
-                    Quantity = products.Quantity
-                };
 
-                var response = await productClient.PostAsJsonAsync("/product/stock", stockValidation);
-                if (response == null)
-                {
-                    throw new Exception($"Produto com ID {products.ProductId} não encontrado.");
-                }
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception($"Falha ao validar estoque do produto {products.ProductId}.");
-                }
-                var validationResult = await response.Content.ReadFromJsonAsync<JsonElement>();
-
-                productAmount += (double)(products.Quantity * );
-            }
             var newOrder = new Order
             {
                 OrderId = Guid.NewGuid(),
-                TotalAmount = productAmount,
+                UserId = Guid.Parse(userId),
                 Status = "Waiting payment",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                OrderProducts = new List<OrderProducts>()
             };
+            double productAmount = 0;
+            
+
+            foreach (var products in orderRequest.Products)
+            {
+                decimal price;
+                var stockValidation = new CreateOrderDTO
+                {
+                    Products = new List<CreateOrderProductDTO>
+                    {
+                        new CreateOrderProductDTO
+                        {
+                            ProductId = products.ProductId,
+                            Quantity = products.Quantity
+                        }
+                    }
+                };
+                var response = await productClient.PostAsJsonAsync("/product/stock", stockValidation);
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Produto com ID {products.ProductId} não encontrado.");
+                }
+
+                var validationResult = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+                if (validationResult.ValueKind == JsonValueKind.Array)
+                {
+                    var firstProduct = validationResult[0];
+                    price = firstProduct.GetProperty("price").GetDecimal();
+
+                    productAmount += (double)(products.Quantity * price);
+                }
+                else
+                {
+                    price = validationResult.GetProperty("price").GetDecimal();
+                    productAmount +=(double)(products.Quantity * price);
+                }
+                var orderProductItem = new OrderProducts
+                {
+                    OrderProuctsId = Guid.NewGuid(),
+                    ProductId = products.ProductId,
+                    Price = price
+                };
+                newOrder.OrderProducts.Add(orderProductItem);
+            }
+            newOrder.OrderId = Guid.NewGuid();
+            newOrder.UserId = Guid.Parse(userId);
+            newOrder.TotalAmount = productAmount;
+            newOrder.Status = "Waiting payment";
+            newOrder.CreatedAt = DateTime.UtcNow;
 
             await _orderRepository.Create(newOrder);
 

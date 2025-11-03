@@ -1,6 +1,6 @@
 using AutoMapper;
-using Ms_Products.DTOs;
-using Ms_Products.Entities;
+using Ms_Order.DTOs;
+using Ms_Order.Entities;
 
 public class MappingProfile : Profile
 {
@@ -8,5 +8,8 @@ public class MappingProfile : Profile
     {
         CreateMap<Order, OrderResponseDTO>();
         CreateMap<OrderResponseDTO, Order>();
+        CreateMap<CreateOrderDTO, Order>();
+        CreateMap<Order, CreateOrderDTO>();
+
     }
 }

@@ -37,8 +37,11 @@ namespace Ms_Products.Repositories
             if (product.Stock < quantity)
             {
                 throw new Exception("Estoque indisponível");
+            } 
+            else
+            {
+                product.Stock -= quantity;
             }
-            product.Stock -= quantity;
             _context.Product.Update(product);
             _context.SaveChanges();
 
