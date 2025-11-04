@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ms_Products.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateProductTables : Migration
+    public partial class CreateProductsTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
@@ -24,7 +27,7 @@ namespace Ms_Products.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
-                    Guid = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RemovedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)

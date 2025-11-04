@@ -20,9 +20,9 @@ namespace Ms_Products.Controllers
             _product = product;
         }
         [HttpGet("{Guid}")]
-        public IActionResult GetByGuid(Guid Guid)
+        public IActionResult GetByGuid(Guid productId)
         {
-            return Ok(_product.GetByGuid(Guid));
+            return Ok(_product.GetByGuid(productId));
         }
         [HttpPost("register")]
         public IActionResult CreateProduct(ProductDTO productDTO)
@@ -30,7 +30,7 @@ namespace Ms_Products.Controllers
             var newProduct = _product.CreateProduct(productDTO);
             var product = new ProductResponseDTO
             {
-                ProductId = newProduct.Guid,
+                ProductId = newProduct.ProductId,
                 Name = newProduct.Name,
                 Description = newProduct.Description,
                 Price = newProduct.Price,

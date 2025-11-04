@@ -24,9 +24,9 @@ namespace Ms_Products.Services
             _productRepository.CreateProduct(product);
             return product;
         }
-        public Product GetByGuid(Guid Guid)
+        public Product GetByGuid(Guid productId)
         {
-            var products = _productRepository.GetByGuid(Guid);
+            var products = _productRepository.GetByGuid(productId);
             return products;
         }
         public async Task<List<OrderProductResponseDTO>> StockVerifier(VerifyStockListDTO verifyStockProductDTO)

@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ms_Payment.AppDbContext;
+using Ms_Payment.Interfaces;
+using Ms_Payment.Repository;
 using static Ms_Payment.Consumer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +67,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false
     };
 });
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(busConfigurator =>
 {

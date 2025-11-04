@@ -7,7 +7,7 @@ namespace Ms_Products.DTOs
 {
     public class OrderProductResponseDTO
     {
-        public Guid OrderId { get; set; }
+        public Guid ProductId { get; set; }
         public decimal Price { get; set; }
     }
 }

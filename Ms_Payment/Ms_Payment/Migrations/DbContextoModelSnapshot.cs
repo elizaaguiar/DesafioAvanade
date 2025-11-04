@@ -37,14 +37,11 @@ namespace Ms_Payment.Migrations
                     b.Property<DateTime>("RemovedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("longtext");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<double>("TotalAmount")
                         .HasColumnType("double");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 

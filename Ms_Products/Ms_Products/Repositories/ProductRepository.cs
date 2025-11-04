@@ -21,15 +21,14 @@ namespace Ms_Products.Repositories
             _context.Add(product);
             _context.SaveChanges();
         }
-        public Product GetByGuid(Guid ProductId)
+        public Product GetByGuid(Guid productId)
         {
-            var product = _context.Product.FirstOrDefault(p => p.Guid == ProductId);
+            var product = _context.Product.FirstOrDefault(p => p.ProductId == productId);
             if (product == null)
             {
                 throw new Exception("Produto indisponível");
             }
             return product;
-            
         }
         public async Task<Product> StockUpdate(Guid productId, int quantity)
         {

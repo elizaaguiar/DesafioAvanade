@@ -12,8 +12,8 @@ namespace Ms_Products.Entities
         public string Description { get; set;  }
         public decimal Price { get; set; }
         public int Stock { get; set; }
-        public Guid Guid { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public Guid ProductId { get; set; } = Guid.NewGuid();
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } 
         public DateTime RemovedAt { get; set; }
 

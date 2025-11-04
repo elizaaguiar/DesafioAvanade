@@ -12,8 +12,8 @@ using Ms_Products.AppDbContext;
 namespace Ms_Products.Migrations
 {
     [DbContext(typeof(DbContexto))]
-    [Migration("20251023200842_CreateProductTables")]
-    partial class CreateProductTables
+    [Migration("20251104183412_CreateProductsTable")]
+    partial class CreateProductsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,14 +39,14 @@ namespace Ms_Products.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("RemovedAt")
                         .HasColumnType("datetime(6)");

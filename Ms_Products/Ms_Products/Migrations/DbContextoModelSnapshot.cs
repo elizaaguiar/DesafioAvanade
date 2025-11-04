@@ -36,14 +36,14 @@ namespace Ms_Products.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("RemovedAt")
                         .HasColumnType("datetime(6)");
@@ -56,7 +56,7 @@ namespace Ms_Products.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 #pragma warning restore 612, 618
         }

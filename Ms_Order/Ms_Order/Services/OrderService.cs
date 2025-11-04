@@ -7,7 +7,9 @@ using System.Text;
 using System.Text.Json;
 using MassTransit;
 using Contracts;
+using Contracts.Enums;
 using AutoMapper;
+using System.Transactions;
 
 namespace Ms_Order.Services
 {
@@ -100,7 +102,7 @@ namespace Ms_Order.Services
             newOrder.OrderId = Guid.NewGuid();
             newOrder.UserId = Guid.Parse(userId);
             newOrder.TotalAmount = productAmount;
-            newOrder.Status = "Waiting payment";
+            newOrder.Status = Status.Pending.ToString();
             newOrder.CreatedAt = DateTime.UtcNow;
 
             await _orderRepository.Create(newOrder);
@@ -108,7 +110,7 @@ namespace Ms_Order.Services
             await _publishEndpoint.Publish(new PaymentRequestedEvent(
              newOrder.OrderId,
              newOrder.TotalAmount,
-             newOrder.Status
+             Status.Pending
          ));
             return newOrder;
         }
